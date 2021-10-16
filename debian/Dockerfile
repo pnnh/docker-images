@@ -1,4 +1,4 @@
-FROM debian:bullseye
+FROM ubuntu:21.10
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Asia/Shanghai
