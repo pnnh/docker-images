@@ -28,3 +28,6 @@ docker login
 docker push elarry/ubuntu:0.0.1
 
 ```
+
+### codebuild文件
+该文件夹下存储的是aws codebuild所使用的构建语句
