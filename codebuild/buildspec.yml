@@ -3,8 +3,18 @@ version: 0.2
 phases:
     install:
         commands:
-            - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2 &
-            - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
+          - echo Asia/Shanghai > /etc/timezone
+          - apt-get update
+          - apt-get install -y tzdata gnupg gnupg2 ca-certificates
+          - apt-get install -y apt-transport-https ca-certificates curl lsb-release
+          - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+          - echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+          - apt-get update
+          - apt-get install -y docker-ce docker-ce-cli containerd.io
+          - apt-get install -y python3-pip
+          - pip install awscli
+          - nohup /usr/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2 &
+          - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
     pre_build:
         commands:
             - echo Logging in to Amazon ECR...
@@ -40,7 +50,3 @@ phases:
             - ls -a
             - cat $CODEBUILD_SRC_DIR/imageDetail.json
             - cat $CODEBUILD_SRC_DIR/imagedefinitions.json
-artifacts:
-    files:
-        - imagedefinitions.json
-        - imageDetail.json
