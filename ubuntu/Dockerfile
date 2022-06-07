@@ -1,4 +1,4 @@
-FROM ubuntu:21.04
+FROM ubuntu:22.04
 
 RUN echo Etc/UTC > /etc/timezone
 RUN apt-get update -y && apt-get install -y --no-install-recommends tzdata gnupg gnupg2 ca-certificates \
